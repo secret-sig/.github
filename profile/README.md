@@ -71,3 +71,18 @@ proactively protects data, freeing individuals and organizations to innovate.
     protects no sensitive system.
 * **Finding**: A potential secret identified by a scanner. A finding is not a
   confirmed leak until it has been validated.
+* **Verification**: The process of confirming that a finding meets the
+  requirements of a secret through static analysis.
+  * Example: A scanner flags a 40 character string in a file named
+    `config.yaml`. Verification confirms this string matches the precise format
+    of a GitHub personal access token.
+  * Example: A string is confirmed to match the `ddd-dd-dddd` format and is found
+    near the keyword `ssn` in a log file.
+* **Validation**: The process of determining if a verified finding is currently
+  active through dynamic analysis.
+  * Example: Following verification of a GitHub token, validation involves
+    querying the GitHub API with that token to see if it authenticates
+    successfully and what permissions it holds. A successful query validates
+    the finding as a live leak.
+  * Example: The verified SSN is queried against the production customer
+    database, confirming it belongs to a real customer.
