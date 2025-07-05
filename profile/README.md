@@ -56,33 +56,35 @@ proactively protects data, freeing individuals and organizations to innovate.
 
 ## **Definitions**
 
-* **Secret**: A piece of sensitive information that, if exposed, could pose a
+* **Secret**: Any piece of sensitive information that, if exposed, could pose a
   risk to an individual or organization. The sensitivity of a secret is highly
   contextual.
-  * Example of a high-impact secret: A private key for signing software
-    releases.
-  * Example of a contextual secret: An email address may be a secret in the
-    context of a private employee list but public on a personal blog.
-* **Leak**: The unauthorized or unintentional exposure of data. Not all exposed
-  data constitutes a high-risk leak.
-  * Example of a leak: A database of user credentials posted on a public forum.
-  * Example of non-leak data: A publicly shared, unused SSH key pair created
-    for a tutorial is technically exposed data, but not a meaningful leak as it
-    protects no sensitive system.
-* **Finding**: A potential secret identified by a scanner. A finding is not a
-  confirmed leak until it has been validated.
-* **Verification**: The process of confirming that a finding meets the
-  requirements of a secret through static analysis.
-  * Example: A scanner flags a 40 character string in a file named
-    `config.yaml`. Verification confirms this string matches the precise format
-    of a GitHub personal access token.
-  * Example: A string is confirmed to match the `ddd-dd-dddd` format and is found
-    near the keyword `ssn` in a log file.
-* **Validation**: The process of determining if a verified finding is currently
-  active through dynamic analysis.
-  * Example: Following verification of a GitHub token, validation involves
-    querying the GitHub API with that token to see if it authenticates
-    successfully and what permissions it holds. A successful query validates
-    the finding as a live leak.
-  * Example: The verified SSN is queried against the production customer
-    database, confirming it belongs to a real customer.
+  * Example:
+    * High Impact: Private signing key for software releases
+    * Contextual: Email address (e.g. in private employee list vs on a personal
+      blog)
+* **Leak**: The unauthorized or unintentional exposure of a secret. Exposing
+  non-sensitive data is not a leak.
+  * Examples:
+    * Leak: A database of user credentials posted on a public forum.
+    * Leak: SSH private key pushed to a public git repo
+    * Leak: Customer data posted into another customer's support ticket
+    * Not a Leak: A publicly shared, _unused_ SSH key pair created _only_ for a
+      tutorial
+* **Finding**: A _potential_ secret identified by a scanner. A finding is not a
+  confirmed secret until it has been validated.
+* **Verification**: The process of confirming that something meets the
+  requirements for a finding. Verification is part of the process of producing
+  a finding.
+  * Examples:
+    * Length/format checks
+    * Entropy checks
+    * Filtering known false positives
+    * Keyword checks
+    * Contextual analysis
+* **Validation**: The process of confirming that a finding is a true positive.
+  It may not be possible to automate validation in every case.
+  * Examples:
+    * Successfully authenticating with a credential finding
+    * Confirming an SSN finding matches an SSN in the customer database
+    * Contacting the repository owner and asking
